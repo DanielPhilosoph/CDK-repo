@@ -38,9 +38,9 @@ export class CdkCymotiveTaskStack extends cdk.Stack {
       runtime: lambda.Runtime.NODEJS_14_X,
       code: lambda.Code.fromAsset("functions"),
       handler: "poster.handler",
-      // environment: {
-      //   TABLE_NAME: table.tableName,
-      // },
+      environment: {
+        BUCKET_NAME: bucket.bucketName,
+      },
     });
 
     // lambda function
@@ -49,9 +49,10 @@ export class CdkCymotiveTaskStack extends cdk.Stack {
       runtime: lambda.Runtime.NODEJS_14_X,
       code: lambda.Code.fromAsset("functions"),
       handler: "ingest.handler",
-      // environment: {
-      //   TABLE_NAME: table.tableName,
-      // },
+      environment: {
+        BUCKET_NAME: bucket.bucketName,
+        TABLE_NAME: table.tableName,
+      },
     });
 
     // lambda function
@@ -63,9 +64,9 @@ export class CdkCymotiveTaskStack extends cdk.Stack {
         runtime: lambda.Runtime.NODEJS_14_X,
         code: lambda.Code.fromAsset("functions"),
         handler: "analyzer.handler",
-        // environment: {
-        //   TABLE_NAME: table.tableName,
-        // },
+        environment: {
+          TABLE_NAME: table.tableName,
+        },
       }
     );
 
@@ -90,11 +91,7 @@ export class CdkCymotiveTaskStack extends cdk.Stack {
     const dynamodb_allow_all_policy = new PolicyStatement({
       effect: Effect.ALLOW,
       actions: ["dynamodb:*"],
-      resources: [
-        `${table.tableArn}`,
-        `${table.tableArn}/*`,
-        "arn:aws:dynamodb:eu-west-3:806333949423:table/*",
-      ],
+      resources: [`${table.tableArn}`, `${table.tableArn}/*`],
     });
 
     // Create policies to s3

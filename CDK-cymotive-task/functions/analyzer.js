@@ -7,7 +7,7 @@ exports.handler = async (event, content) => {
     // numberofanomalies
 
     const data = await dynamoDbClient
-      .scan({ TableName: "ids-table-cymotive-task" })
+      .scan({ TableName: process.env.TABLE_NAME })
       .promise();
     let counter = 0;
     data.Items.forEach((record) => {

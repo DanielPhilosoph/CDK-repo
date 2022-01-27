@@ -6,7 +6,7 @@ exports.handler = async (event) => {
   console.log(event.Records[0].s3.object.key);
 
   const params = {
-    Bucket: "cdk-cymotive-task", // bucket name,
+    Bucket: process.env.BUCKET_NAME, // bucket name,
     Key: `${event.Records[0].s3.object.key}`, // path to the object you're looking for
   };
 
@@ -14,7 +14,7 @@ exports.handler = async (event) => {
 
   const paramsToDynamoDB = {
     Item: JSON.parse(data.Body.toString()),
-    TableName: "ids-table-cymotive-task",
+    TableName: process.env.TABLE_NAME,
   };
   try {
     await dynamoDbClient.put(paramsToDynamoDB).promise();
